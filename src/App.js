@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import List from './List'
+import AddTask from './AddTask'
+
 
 function App() {
+
+const[taskList, setTaskList] = React.useState([
+  {id:1, done: false, text: "Это первая и тестовая задача. Удали ее и начинай пользоваться приложением."}
+])
+
+function addTask(formText){
+  setTaskList(taskList.concat([{id:(taskList.length +1), done: false, text: formText}]))
+}
+
+function deleteTask(id){
+  setTaskList(taskList.filter(task => task.id !== id))
+}
+
+function completeTask(id){
+  setTaskList(taskList.map(task => {
+    if (task.id == id){
+      task.done = !task.done
+    }
+    return task
+  }))
+}
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Список задач</h1>
+      <AddTask addTask={addTask}/>
+      <List taskList={taskList} completeTask={completeTask} deleteTask={deleteTask}/>
     </div>
   );
 }
